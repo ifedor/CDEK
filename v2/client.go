@@ -3,8 +3,9 @@ package v2
 import (
 	"context"
 	"fmt"
-	"github.com/google/go-querystring/query"
 	"strings"
+
+	"github.com/google/go-querystring/query"
 )
 
 type Client interface {
@@ -17,6 +18,7 @@ type Client interface {
 	OrderDelete(ctx context.Context, uuid string) (*Response, error)
 	OrderUpdate(ctx context.Context, input *OrderUpdateRequest) (*OrderUpdateResponse, error)
 	OrderStatus(ctx context.Context, uuid string) (*Response, error)
+	OrderGet(ctx context.Context, cdekNumber *int64, imNumber *string) (*Response, error)
 }
 
 type Options struct {
