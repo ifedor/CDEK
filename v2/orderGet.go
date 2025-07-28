@@ -41,3 +41,9 @@ func (c *clientImpl) OrderGet(ctx context.Context, cdekNumber *int64, imNumber *
 
 	return jsonReq[Response](req)
 }
+
+type OrderGetResponse struct {
+	Entity          OrderStatusEntity        `json:"entity,omitempty"`
+	Requests        []ResponseRequests       `json:"requests"`
+	RelatedEntities *ResponseRelatedEntities `json:"related_entities,omitempty"`
+}
