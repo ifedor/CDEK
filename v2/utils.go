@@ -60,7 +60,7 @@ func jsonReq[T any](req *http.Request) (*T, error) {
 
 	var respErr RespErrors
 	if err := json.Unmarshal(payload, &respErr); err == nil && len(respErr.Errors) > 0 {
-		return nil, respErr
+		return nil, &respErr
 	}
 
 	if err := json.Unmarshal(payload, &s); err != nil {
