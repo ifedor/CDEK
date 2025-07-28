@@ -4,14 +4,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/ernesto-jimenez/httplogger"
-	"github.com/hashicorp/go-multierror"
-	"github.com/pkg/errors"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/ernesto-jimenez/httplogger"
+	"github.com/hashicorp/go-multierror"
+	"github.com/pkg/errors"
 )
 
 func validateResponse(requests []ResponseRequests) error {
@@ -36,6 +37,14 @@ type RespErrors struct {
 	} `json:"errors,omitempty"`
 }
 
+func (er RespErrors) Error() string {
+	var result string
+	for _, item := range er.Errors {
+		result += fmt.Sprintf("%s: %s\n", item.Code, item.Message)
+	}
+	return result
+}
+
 func jsonReq[T any](req *http.Request) (*T, error) {
 	response, err := client.Do(req)
 	if err != nil {
@@ -51,7 +60,7 @@ func jsonReq[T any](req *http.Request) (*T, error) {
 
 	var respErr RespErrors
 	if err := json.Unmarshal(payload, &respErr); err == nil && len(respErr.Errors) > 0 {
-		return nil, fmt.Errorf("json error: %v", respErr)
+		return nil, respErr
 	}
 
 	if err := json.Unmarshal(payload, &s); err != nil {
